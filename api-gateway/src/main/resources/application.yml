@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: API-GATEWAY
+
+  cloud:
+    gateway:
+      routes:
+        - id: PROBLEM-SERVICE
+          uri: lb://PROBLEM-SERVICE
+          predicates:
+            - Path=/api/v1/problems/**
+
+        - id: USER-SERVICE
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/api/v1/users/**
+
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: '*'
+            allowedMethods: GET,POST,PUT,DELETE
+
+server:
+  port: 9191
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+
+
+
