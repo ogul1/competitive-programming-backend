@@ -1,6 +1,6 @@
 package com.ogul.problemservice.dto;
 
-import com.ogul.problemservice.model.Input;
+import com.ogul.problemservice.entity.Input;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

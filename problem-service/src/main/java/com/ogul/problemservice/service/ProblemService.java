@@ -1,40 +1,36 @@
 package com.ogul.problemservice.service;
 
 import com.ogul.problemservice.dto.ProblemDto;
+import com.ogul.problemservice.dto.ProblemFilterRequest;
+import com.ogul.problemservice.dto.ProblemResponse;
 import com.ogul.problemservice.mapper.ProblemMapper;
-import com.ogul.problemservice.model.Problem;
+import com.ogul.problemservice.entity.Problem;
 import com.ogul.problemservice.repository.ProblemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Objects;
 
 @RequiredArgsConstructor
 @Service
 public class ProblemService {
-    private final ProblemRepository problemRepository;
 
+    private final ProblemRepository problemRepository;
     private final ProblemMapper problemMapper;
 
     public Problem createProblem(Problem problem) {
         return problemRepository.save(problem);
     }
 
-    public List<Problem> getProblems(int page, int size, String sort, String direction) {
-        Page<Problem> problems = problemRepository.findAll(
-                PageRequest.of(
-                        page, size,
-                        Sort.by(
-                                Objects.equals(direction, "ASC") ? Sort.Direction.ASC : Sort.Direction.DESC,
-                                sort
-                        )
-                )
-        );
-        return problems.getContent();
+    public ProblemResponse getProblems(ProblemFilterRequest request, Pageable pageable) {
+        Page<Problem> problems = problemRepository.filter(request, pageable);
+
+        return ProblemResponse.builder()
+                .problems(problems.getContent())
+                .currentPage(problems.getNumber())
+                .totalPages(problems.getTotalPages())
+                .totalCount(problems.getTotalElements())
+                .build();
     }
 
     public Problem getProblemByTitle(String title) {
