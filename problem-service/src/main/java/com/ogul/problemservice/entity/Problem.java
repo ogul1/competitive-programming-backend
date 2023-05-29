@@ -1,4 +1,4 @@
-package com.ogul.problemservice.model;
+package com.ogul.problemservice.entity;
 
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
